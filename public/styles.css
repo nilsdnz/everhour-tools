@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+	margin: 0;
+	@apply cursor-default;
+	@apply bg-gray-200;
+}
+
+* {
+	@apply cursor-default;
+	font-family: monospace;
+	@apply text-gray-800;
+}
+
+.hover-reveal-child:hover > * {
+	opacity: 1;
+}
+
+button {
+	@apply text-2xl;
+	@apply text-white;
+	@apply bg-indigo-400;
+	@apply hover:bg-indigo-600;
+	@apply px-5;
+	@apply py-2;
+	@apply cursor-pointer;
+	@apply transition-colors;
+}
+
+h1 {
+	@apply text-5xl;
+	@apply text-gray-900;
+}
