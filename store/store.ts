@@ -5,9 +5,9 @@ interface State {
 	authorized: boolean
 	user: everhour.User | null
 	apiKey: string | null
-	authorize: (apiKey: string) => void
+	authorize: (apiKey: string) => Promise<void>
 	removeAuth: () => void
-	init: () => void
+	init: () => Promise<void>
 }
 
 export const useStore = create<State>(set => ({
@@ -19,10 +19,10 @@ export const useStore = create<State>(set => ({
 		set({ apiKey: null, user: null, authorized: false })
 		localStorage.removeItem('api_key')
 	},
-	init: () => {
+	init: async () => {
 		const key = localStorage.getItem('api_key')
 		if (key) {
-			authorize(set, key)
+			return authorize(set, key)
 		}
 	}
 }))

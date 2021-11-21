@@ -5,12 +5,12 @@
 html,
 body {
 	margin: 0;
-	@apply cursor-default;
+	@apply cursor-auto;
 	@apply bg-gray-200;
 }
 
 * {
-	@apply cursor-default;
+	@apply cursor-auto;
 	font-family: monospace;
 	@apply text-gray-800;
 }
@@ -42,6 +42,13 @@ button {
 	@apply py-2;
 	@apply cursor-pointer;
 	@apply transition-colors;
+}
+
+a {
+	@apply cursor-pointer;
+	@apply hover:opacity-95;
+	@apply active:opacity-80;
+	@apply transition-opacity;
 }
 
 h1 {

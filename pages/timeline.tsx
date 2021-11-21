@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import type { NextPage } from 'next'
 import dayjs from 'dayjs'
 import * as everhour from '../lib/everhour'
 import { useStore } from '../store/store'
@@ -8,19 +7,16 @@ import { Page } from '../components/page'
 import { Timesheet } from '../components/timesheet'
 
 const Timeline: NextPage = () => {
-	const authorized = useStore(state => state.authorized)
 	const apiKey = useStore(state => state.apiKey)
 
 	const [timesheet, setTimesheet] = useState<everhour.Time[]>()
 	const [day, setDay] = useState<dayjs.Dayjs>(dayjs())
 
-	const router = useRouter()
-
 	useEffect(() => {
-		if (authorized && apiKey) {
+		if (apiKey) {
 			everhour.getTimesheet(apiKey, day).then(setTimesheet)
 		}
-	}, [authorized, apiKey, day])
+	}, [apiKey, day])
 
 	const noFuture = day.isSame(dayjs(), 'day') || day.isAfter(dayjs(), 'day')
 
@@ -46,7 +42,9 @@ const Timeline: NextPage = () => {
 					{timesheet?.length ? (
 						<Timesheet timesheet={timesheet} />
 					) : (
-						<div className='w-full text-center -mt-14'>no data</div>
+						<div className='w-full h-full flex flex-col justify-center items-center'>
+							<div>no data</div>
+						</div>
 					)}
 				</div>
 			</div>

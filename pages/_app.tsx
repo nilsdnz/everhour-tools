@@ -12,8 +12,6 @@ const App = ({ Component, pageProps }: AppProps) => {
 	useEffect(() => {
 		if (!authorized) {
 			router.replace('/')
-		} else {
-			router.push('/timeline')
 		}
 	}, [authorized])
 
