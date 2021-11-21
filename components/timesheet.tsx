@@ -35,66 +35,71 @@ export const Timesheet = ({ timesheet }: Props) => {
 	const clockTimeMinutes = lasTimerEnd.diff(firstTimerStart, 'minutes')
 
 	useEffect(() => {
-		scrollContainer.current?.scrollTo({ left: 0, behavior: 'smooth' })
+		scrollContainer.current?.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
 	}, [timesheet])
 
 	return (
 		<div>
 			<div
 				ref={scrollContainer}
-				className='relative px-10 pt-16 w-screen h-screen overflow-y-hidden overflow-x-scroll no-scrollbar'
+				style={{}}
+				className='relative px-10 pt-16 w-screen h-screen overflow-y-scroll overflow-x-scroll no-scrollbar'
 			>
-				<div className='relative'>
-					<div className='absolute inset-0 h-full'>
+				<div className='relative h-auto'>
+					<div className='absolute inset-0 bottom-0 h-full'>
 						{[...new Array(Math.round(clockTimeMinutes / 60) + 2)].map((_, i) => {
 							const date = dayjs(firstTimerStart).set('minute', 0).add(i, 'hours')
 							const left = date.diff(firstTimerStart, 'seconds') / 10
 
 							return (
-								<div key={i} style={{ left: left * zoom }} className='absolute top-0'>
-									<div className='absolute w-px top-0 h-[calc(100vh-72px)] bg-gray-400' />
+								<div
+									key={i}
+									style={{ left: left * zoom }}
+									className='absolute top-0 h-full transition-all'
+								>
+									<div className='absolute w-px top-0 h-[calc(100vh-72px)] min-h-full bg-gray-400' />
 									<div className='ml-2 text-gray-600'>{date.add(1, 'h').format('HH:mm')}</div>
 								</div>
 							)
 						})}
 					</div>
-				</div>
-				<div className='mt-12'>
-					{timesheet.map((item, index) => {
-						const backgroundColor = COLORS[index % COLORS.length]
+					<div className='relative pt-6'>
+						{timesheet.map((item, index) => {
+							const backgroundColor = COLORS[index % COLORS.length]
 
-						return (
-							<div key={index} className='relative h-12 my-4'>
-								{item.history
-									.filter(item => item.action === 'TIMER')
-									.map((history, index) => {
-										const end = dayjs(history.createdAt)
-										const start = end.subtract(history.time, 'seconds')
-										const left = (end.diff(firstTimerStart, 'seconds') - history.time) / 10
-										const width = history.time / 10
+							return (
+								<div key={index} className='relative h-12 my-4'>
+									{item.history
+										.filter(item => item.action === 'TIMER')
+										.map((history, index) => {
+											const end = dayjs(history.createdAt)
+											const start = end.subtract(history.time, 'seconds')
+											const left = (end.diff(firstTimerStart, 'seconds') - history.time) / 10
+											const width = history.time / 10
 
-										const minutes = Math.round(history.time / 60)
-										const hours = Math.floor(minutes / 60)
+											const minutes = Math.round(history.time / 60)
+											const hours = Math.floor(minutes / 60)
 
-										return (
-											<div
-												key={index}
-												style={{ width: width * zoom, left: left * zoom, backgroundColor }}
-												className='absolute top-0 h-8 rounded-sm hover-reveal-child transition-all'
-											>
-												<p className='-mt-7 w-max leading-8 opacity-0 transition-opacity'>
-													{start.add(1, 'hour').format('HH:mm')} /{' '}
-													{hours > 0
-														? `${hours}:${minutes.toString().padStart(2, '0')}h`
-														: `${minutes}m`}{' '}
-													/ {item.task?.name}
-												</p>
-											</div>
-										)
-									})}
-							</div>
-						)
-					})}
+											return (
+												<div
+													key={index}
+													style={{ width: width * zoom, left: left * zoom, backgroundColor }}
+													className='absolute top-0 h-8 rounded-sm hover-reveal-child transition-all'
+												>
+													<p className='-mt-7 w-max leading-8 opacity-0 transition-opacity'>
+														{start.add(1, 'hour').format('HH:mm')} /{' '}
+														{hours > 0
+															? `${hours}:${minutes.toString().padStart(2, '0')}h`
+															: `${minutes}m`}{' '}
+														/ {item.task?.name}
+													</p>
+												</div>
+											)
+										})}
+								</div>
+							)
+						})}
+					</div>
 				</div>
 			</div>
 			<div className='fixed bottom-0 inset-x-0 h-14 flex flex-row justify-between items-center'>
