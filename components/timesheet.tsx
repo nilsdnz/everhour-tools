@@ -18,7 +18,7 @@ export const Timesheet = ({ timesheet }: Props) => {
 
 	return (
 		<div>
-			<div className='my-6 mx-10'>
+			<div className='my-6 px-10 h-full w-screen overflow-x-scroll no-scrollbar'>
 				{timesheet.map((item, index) => {
 					const backgroundColor = COLORS[index % COLORS.length]
 

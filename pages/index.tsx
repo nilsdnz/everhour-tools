@@ -42,7 +42,7 @@ const Home: NextPage = () => {
 	const noFuture = day.isSame(dayjs(), 'day') || day.isAfter(dayjs(), 'day')
 
 	return (
-		<div className='relative'>
+		<div>
 			{ready && (
 				<div className='w-screen fixed z-50 h-14 flex flex-row justify-between items-center bg-gray-300'>
 					<button onClick={() => setDay(day => day.subtract(1, 'day'))} className='h-full'>
@@ -60,7 +60,7 @@ const Home: NextPage = () => {
 					</button>
 				</div>
 			)}
-			<div className='relative w-max h-auto flex justify-center items-center'>
+			<div className='relative w-screen h-auto flex justify-center items-center'>
 				{ready ? (
 					<div className='flex flex-col justify-center items-center min-h-screen py-14'>
 						{timesheet?.length ? (
