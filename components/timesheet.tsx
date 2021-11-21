@@ -9,10 +9,6 @@ interface Props {
 }
 
 export const Timesheet = ({ timesheet }: Props) => {
-	const [zoom, setZoom] = useState(1)
-
-	const scrollContainer = useRef<HTMLDivElement>(null)
-
 	const firstTimerStart = dayjs(timesheet[0]?.history[0]?.createdAt).subtract(
 		timesheet ? timesheet[0]?.history[0]?.time : 0,
 		'seconds'
@@ -34,6 +30,24 @@ export const Timesheet = ({ timesheet }: Props) => {
 
 	const clockTimeMinutes = lasTimerEnd.diff(firstTimerStart, 'minutes')
 
+	const [pixelsPerMinute, setPixelsPerMinute] = useState(
+		(window.innerWidth - 128) / clockTimeMinutes
+	)
+	const [zoom, setZoom] = useState(1)
+
+	const scrollContainer = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		const onResize = () => {
+			if (clockTimeMinutes > 0) setPixelsPerMinute((window.innerWidth - 128) / clockTimeMinutes)
+		}
+		onResize()
+		window.addEventListener('resize', onResize)
+		return () => {
+			window.removeEventListener('resize', onResize)
+		}
+	}, [clockTimeMinutes, timesheet])
+
 	useEffect(() => {
 		scrollContainer.current?.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
 	}, [timesheet])
@@ -42,19 +56,18 @@ export const Timesheet = ({ timesheet }: Props) => {
 		<div>
 			<div
 				ref={scrollContainer}
-				style={{}}
 				className='relative px-10 pt-16 w-screen h-screen overflow-y-scroll overflow-x-scroll no-scrollbar'
 			>
 				<div className='relative h-auto'>
 					<div className='absolute inset-0 bottom-0 h-full'>
 						{[...new Array(Math.round(clockTimeMinutes / 60) + 2)].map((_, i) => {
 							const date = dayjs(firstTimerStart).set('minute', 0).add(i, 'hours')
-							const left = date.diff(firstTimerStart, 'seconds') / 10
+							const left = date.diff(firstTimerStart, 'seconds') / 60
 
 							return (
 								<div
 									key={i}
-									style={{ left: left * zoom }}
+									style={{ left: left * pixelsPerMinute * zoom }}
 									className='absolute top-0 h-full transition-all'
 								>
 									<div className='absolute w-px top-0 h-[calc(100vh-72px)] min-h-full bg-gray-400' />
@@ -74,8 +87,8 @@ export const Timesheet = ({ timesheet }: Props) => {
 										.map((history, index) => {
 											const end = dayjs(history.createdAt)
 											const start = end.subtract(history.time, 'seconds')
-											const left = (end.diff(firstTimerStart, 'seconds') - history.time) / 10
-											const width = history.time / 10
+											const left = (end.diff(firstTimerStart, 'seconds') - history.time) / 60
+											const width = history.time / 60
 
 											const minutes = Math.round(history.time / 60)
 											const hours = Math.floor(minutes / 60)
@@ -83,7 +96,11 @@ export const Timesheet = ({ timesheet }: Props) => {
 											return (
 												<div
 													key={index}
-													style={{ width: width * zoom, left: left * zoom, backgroundColor }}
+													style={{
+														width: width * pixelsPerMinute * zoom,
+														left: left * pixelsPerMinute * zoom,
+														backgroundColor
+													}}
 													className='absolute top-0 h-8 rounded-sm hover-reveal-child transition-all'
 												>
 													<p className='-mt-7 w-max leading-8 opacity-0 transition-opacity'>
