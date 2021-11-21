@@ -60,15 +60,13 @@ const Home: NextPage = () => {
 					</button>
 				</div>
 			)}
-			<div className='relative w-screen h-auto flex justify-center items-center'>
+			<div className='relative w-screen h-screen flex justify-center items-center'>
 				{ready ? (
-					<div className='flex flex-col justify-center items-center min-h-screen py-14'>
-						{timesheet?.length ? (
-							<Timesheet timesheet={timesheet} />
-						) : (
-							<div className='w-screen text-center -mt-14'>no data</div>
-						)}
-					</div>
+					timesheet?.length ? (
+						<Timesheet timesheet={timesheet} />
+					) : (
+						<div className='w-screen text-center -mt-14'>no data</div>
+					)
 				) : (
 					<div className='w-screen h-screen flex flex-col justify-center items-center'>
 						<div className='w-[90vw] max-w-[890px]'>

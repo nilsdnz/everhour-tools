@@ -61,7 +61,7 @@ export interface Time {
 
 export interface History {
 	id: number
-	action: 'TIMER' | string
+	action: 'TIMER' | 'EDIT'
 	createdAt: string
 	// user id
 	createdBy: User['id']
