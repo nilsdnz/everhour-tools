@@ -9,8 +9,6 @@ const TimerStatus: NextPage = () => {
 
 	const [timer, setTimer] = useState<everhour.Timer>()
 
-	const cursorElement = useRef<HTMLDivElement>(null)
-	const backdropElement = useRef<HTMLDivElement>(null)
 	const interval = useRef<NodeJS.Timer>()
 
 	const run = async () => {
@@ -39,17 +37,6 @@ const TimerStatus: NextPage = () => {
 	useEffect(() => {
 		run()
 	}, [apiKey])
-
-	useEffect(() => {
-		document.onmousemove = e => {
-			if (cursorElement.current) {
-				cursorElement.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`
-			}
-			if (backdropElement.current) {
-				backdropElement.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`
-			}
-		}
-	}, [])
 
 	return (
 		<Page>
