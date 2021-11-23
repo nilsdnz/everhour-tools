@@ -104,7 +104,8 @@ export const Timesheet = ({ timesheet }: Props) => {
 													className='absolute top-0 h-8 rounded-sm hover-reveal-child transition-all'
 												>
 													<p className='-mt-7 w-max leading-8 opacity-0 transition-opacity'>
-														{start.add(1, 'hour').format('HH:mm')} /{' '}
+														{start.add(1, 'hour').format('HH:mm')} -{' '}
+														{end.add(1, 'hour').format('HH:mm')} /{' '}
 														{hours > 0
 															? `${hours}:${(minutes % 60).toString().padStart(2, '0')}h`
 															: `${minutes}m`}{' '}
