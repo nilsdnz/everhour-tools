@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
+import 'dayjs/locale/de'
 import * as everhour from '../lib/everhour'
+
+dayjs.locale('de')
 
 const COLORS = ['#083D77', '#DA4167', '#2A9D8F', '#2E4057', '#BFAE48']
 
